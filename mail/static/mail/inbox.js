@@ -144,13 +144,25 @@ function load_mailbox(mailbox) {
     .then(response => response.json())
     .then(emails => {
       const sections_to_show = [['sender', 5], ['subject', 3], ['timestamp', 4]];
-      const artificial_first_email = {'sender': 'Sender', 'subject': 'Subject', 'timestamp': 'Date and Time',
+      console.log(`this is the mailbox ${mailbox}`)
+      var mail_Box = "";
+      if (mailbox=="sent"){
+        mail_Box= 'To';
+        console.log(mail_Box);
+      }
+      else{
+        mail_Box= 'From';
+        console.log(`other than sent ${mail_Box}`)
+      }
+      const artificial_first_email = {'sender': mail_Box, 'subject': 'Subject', 'timestamp': 'Date and Time',
        'read': true};
       emails = [artificial_first_email, ...emails];
       emails.forEach( email => {
         const row_div_element = document.createElement('div');
+        
         row_div_element.classList.add("row", "email-line-box", email["read"] ? "read" : "unread");
         if (email === artificial_first_email){ row_div_element.id = "titled-first-row"}
+        console.log(sections_to_show);
         sections_to_show.forEach(
           section => {
             const section_name = section[0];
