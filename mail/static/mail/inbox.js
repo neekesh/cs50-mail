@@ -143,30 +143,32 @@ function load_mailbox(mailbox) {
   fetch(`/emails/${mailbox}`)
     .then(response => response.json())
     .then(emails => {
-      const sections_to_show = [['sender', 5], ['subject', 3], ['timestamp', 4]];
-      console.log(`this is the mailbox ${mailbox}`)
-      var mail_Box = "";
+      var sections_to_show = [ ['subject', 3], ['timestamp', 4]];
+      var  artificial_first_email = { 'subject': 'Subject', 'timestamp': 'Date and Time',
+      'read': true};
       if (mailbox=="sent"){
-        mail_Box= 'To';
-        console.log(mail_Box);
+        sections_to_show = [['recipients', 5], ...sections_to_show];
+        artificial_first_email = {'recipients' : 'To', ...artificial_first_email};
       }
       else{
-        mail_Box= 'From';
-        console.log(`other than sent ${mail_Box}`)
+        
+        sections_to_show = [ ['sender', 5], ...sections_to_show];
+        artificial_first_email = {'sender' : 'From', ...artificial_first_email};
       }
-      const artificial_first_email = {'sender': mail_Box, 'subject': 'Subject', 'timestamp': 'Date and Time',
-       'read': true};
+      
+       console.log(artificial_first_email)
       emails = [artificial_first_email, ...emails];
       emails.forEach( email => {
         const row_div_element = document.createElement('div');
-        
+        console.log(email);
         row_div_element.classList.add("row", "email-line-box", email["read"] ? "read" : "unread");
         if (email === artificial_first_email){ row_div_element.id = "titled-first-row"}
-        console.log(sections_to_show);
         sections_to_show.forEach(
           section => {
             const section_name = section[0];
+            console.log(section_name);
             const section_size = section[1];
+            console.log(`this is section_size ${section_size}`);
             const div_section = document.createElement('div');
             div_section.classList.add(`col-${section_size}`, `${section_name}-section`);
             div_section.innerHTML = `<p>${email[section_name]}</p>`
