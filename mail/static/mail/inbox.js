@@ -160,15 +160,21 @@ function load_mailbox(mailbox) {
       emails = [artificial_first_email, ...emails];
       emails.forEach( email => {
         const row_div_element = document.createElement('div');
-        console.log(email);
-        row_div_element.classList.add("row", "email-line-box", email["read"] ? "read" : "unread");
+        row_div_element.classList.add("row", "email-line-box");
+        if (email["read"]){
+          row_div_element.classList.add("read");
+        }
+        else{
+          row_div_element.classList.add("unread", "font-weight-bold");
+        }
+        
         if (email === artificial_first_email){ row_div_element.id = "titled-first-row"}
         sections_to_show.forEach(
           section => {
             const section_name = section[0];
-            console.log(section_name);
+          
             const section_size = section[1];
-            console.log(`this is section_size ${section_size}`);
+            
             const div_section = document.createElement('div');
             div_section.classList.add(`col-${section_size}`, `${section_name}-section`);
             div_section.innerHTML = `<p>${email[section_name]}</p>`
